@@ -1,0 +1,22 @@
+.navbar{
+    background-color: rgb(31, 31, 31);
+    border-radius: 30px;
+    display: flex;
+  }
+
+  .navbar li{
+    float:left;
+    list-style: none; 
+    margin: 13px 20px;
+    padding: 3px 3px;
+    text-decoration: none;
+    color: white;
+}
+
+.navbar ul{
+    overflow: auto;
+}
+
+.logout {
+  cursor: pointer;
+}

@@ -44,15 +44,22 @@ const NewFoodItemForm = (props) => {
                     <label>Name</label>
                     <input 
                         type='text' 
+                        list='food-items'
+                        name='item_name'
                         onChange={itemNameChangeHandler}
                         value={enteredItem.foodItemName}
                         required
                     />
+                    <datalist id='food-items'>
+                        <option>Pizza</option>
+                        <option>Burger</option>
+                    </datalist>
                 </div>
                 <div className='new-food-item__control'>
                     <label>Date</label>
                     <input 
                         type='date' 
+                        name='consumed_date'
                         min='2020-01-01' 
                         onChange={itemDateChangeHandler} 
                         value={enteredItem.consumedDate}
@@ -62,6 +69,7 @@ const NewFoodItemForm = (props) => {
                     <label>Calories</label>
                     <input 
                         type='number' 
+                        name='item_calories'
                         min='10' step='5' 
                         onChange={itemCaloriesChangeHandler}
                         value={enteredItem.foodItemCalories}

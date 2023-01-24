@@ -1,51 +1,114 @@
-import { useState } from "react";
+import { Component } from "react";
 import FoodItems from "./components/FoodItems/FoodItems";
 import TopFoodItems from "./components/FoodItems/TopFoodItems"
 import NewFoodItem from "./components/NewFoodItem/NewFoodItem";
 import NavBar from "./components/UI/NavBar";
 import UserRegistration from "./components/UserRegistration/UserRegistration";
 
-const DUMMY_FOOD_ITEMS = [
-  { id: 1, foodItemName: 'Noodles', consumedDate: new Date(2023, 0, 18, 12), foodItemCalories: 200},
-  { id: 2, foodItemName: 'Pizza', consumedDate: new Date(2023, 0, 17, 12), foodItemCalories: 40},
-  { id: 3, foodItemName: 'Cake', consumedDate: new Date(2023, 0, 19, 12), foodItemCalories: 230},
-];
+class App extends Component {
+  constructor() {
+    super();
+    this.state = {
+      user: {userEmail: '', userPassword: ''},
+      foodItems: [],
+      filterDate: new Date().toISOString().slice(0, 10)
+    }
+    this.filterHandler = this.filterHandler.bind(this);
+  }
 
-const App = () => {
-  const [foodItems, setFoodItems] = useState(DUMMY_FOOD_ITEMS);
-  const [loginFlag, setLoginFlag] = useState(0)
+  fetchItems(filterDate) {
+    filterDate = filterDate || this.state.filterDate;
+    fetch(`http://127.0.0.1:5000/diet?filter_date=${filterDate}`, {
+        method: 'GET',
+        headers: {
+            'Accept': '*/*',
+            'Content-Type': 'application/json',
+            'X-User-Auth': btoa(`${this.props.email}:${this.props.password}`)
+        }})
+        .then((response) => {
+            return response.json();
+        })
+        .then((data) => {
+            this.setState((prevState) => {
+                return {...prevState, foodItems: data.user_items}
+            })
 
-  const addNewItemHandler = (newItem) => {
-    setFoodItems((prevState) => {
-      return [newItem, ...prevState];
+        });
+  }
+
+  addNewItemHandler = (newItem) => {
+    fetch('http://127.0.0.1:5000/diet', {
+      method: 'POST',
+      headers: {
+        'Accept': '*/*',
+        'Content-Type': 'application/json',
+        'X-User-Auth': btoa(`${this.state.email}:${this.state.password}`)
+      },
+      body: JSON.stringify(newItem)
+    }).then(response => response.json())
+      .then(data => {
+        this.setState((prevState) => {
+          this.fetchItems();
+          return {...prevState, foodItems: [...prevState.foodItems, data.user_item]};
+        });
+      })
+  }
+
+  signInHandler = (user) => {
+    fetch('http://127.0.0.1:5000/sign-in', {
+      method: 'POST',
+      headers: {
+        'Accept': '*/*',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        email: user.userEmail,
+        password: user.userPassword
+      })})
+        .then(() => {
+          this.setState((prevState) => {
+            return {...prevState, user: user}
+          });
+          this.fetchItems();
+        })
+  }
+
+  logoutHandler = () => {
+    this.setState((prevState) => {
+      return {...prevState, user: {userEmail: '', userPassword: ''}}
+    })
+  }
+
+  filterHandler(filterDate) {
+    this.setState((prevState) => {
+      this.fetchItems(filterDate);
+      return {...prevState, filterDate: filterDate}
     });
   }
 
-  const signInHandler = (flag) => {
-    setLoginFlag(flag);
+  render() {
+    return (
+      <div>
+        <NavBar user={this.state.user} onLogout={this.logoutHandler}></NavBar>
+        { this.state.user.userEmail && this.state.user.userPassword ? (
+          <div>
+            <NewFoodItem onAddFoodItem={this.addNewItemHandler}></NewFoodItem>
+            <FoodItems 
+              user={this.state.user} 
+              foodItems={this.state.foodItems}
+              onFilterChange={this.filterHandler}
+            ></FoodItems>
+          </div>
+        ) : (
+          <div> 
+            <UserRegistration onSignIn={this.signInHandler}></UserRegistration>
+            <TopFoodItems></TopFoodItems>
+          </div>
+        )}
+        
+      </div>
+    );
   }
-
-  const logoutHandler = (flag) => {
-    setLoginFlag(flag);
-  }
-
-  return (
-    <div>
-      <NavBar loginFlag={loginFlag} onLogout={logoutHandler}></NavBar>
-      { loginFlag ? (
-        <div>
-          <NewFoodItem onAddFoodItem={addNewItemHandler}></NewFoodItem>
-          <FoodItems foodItems={foodItems}></FoodItems>
-        </div>
-      ) : (
-        <div> 
-          <UserRegistration onSignIn={signInHandler}></UserRegistration>
-          <TopFoodItems foodItems={foodItems}></TopFoodItems>
-        </div>
-      )}
-      
-    </div>
-  );
 }
 
 export default App;

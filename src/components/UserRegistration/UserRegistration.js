@@ -1,12 +1,15 @@
-import LoginForm from "./LoginForm";
+import SignInForm from "./SignInForm";
 import './Form.css';
+import { Component } from "react";
 
-const UserRegistration = (props) => {
-    return (
-        <div className="user-registration">
-            <LoginForm onSignIn={props.onSignIn}></LoginForm>
-        </div>
-    );
+class UserRegistration extends Component {
+    render() {
+        return (
+            <div className="user-registration">
+                <SignInForm onSignIn={this.props.onSignIn}></SignInForm>
+            </div>
+        );
+    }
 }
 
 export default UserRegistration;

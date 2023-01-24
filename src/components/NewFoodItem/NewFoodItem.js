@@ -4,8 +4,7 @@ import NewFoodItemForm from './NewFoodItemForm';
 
 const NewFoodItem = (props) => {
     const addFoodItemHandler = (enteredItemData) => {
-        const newItem = {...enteredItemData, id: Math.random().toString()};
-        props.onAddFoodItem(newItem);
+        props.onAddFoodItem(enteredItemData);
     };
 
     return (

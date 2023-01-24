@@ -29,7 +29,7 @@ const NewFoodItemForm = (props) => {
 
     const submitHandler = (event) => {
         event.preventDefault();
-        props.onAddFoodItem({...enteredItem, consumedDate: new Date(enteredItem.consumedDate)});
+        props.onAddFoodItem(enteredItem);
         setEnteredItem({
             foodItemName: '',
             consumedDate: defaultDateString,

@@ -9,7 +9,7 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      user: {userEmail: '', userPassword: ''},
+      user: JSON.parse(window.localStorage.getItem('user')) || {userEmail: '', userPassword: ''},
       foodItems: [],
       filterDate: new Date().toISOString().slice(0, 10)
     }
@@ -67,7 +67,8 @@ class App extends Component {
       })})
         .then(() => {
           this.setState((prevState) => {
-            return {...prevState, user: user}
+            window.localStorage.setItem('user', JSON.stringify(user));
+            return {...prevState, user: user};
           });
           this.fetchItems();
         })
@@ -75,7 +76,8 @@ class App extends Component {
 
   logoutHandler = () => {
     this.setState((prevState) => {
-      return {...prevState, user: {userEmail: '', userPassword: ''}}
+      window.localStorage.setItem('user', JSON.stringify({userEmail: '', userPassword: ''}));
+      return {...prevState, user: {userEmail: '', userPassword: ''}};
     })
   }
 
@@ -84,6 +86,10 @@ class App extends Component {
       this.fetchItems(filterDate);
       return {...prevState, filterDate: filterDate}
     });
+  }
+
+  componentDidMount() {
+    this.fetchItems();
   }
 
   render() {

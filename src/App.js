@@ -17,9 +17,9 @@ class App extends Component {
   }
 
   fetchItems(filterDate) {
-    // console.log(this.state);
     filterDate = filterDate || this.state.filterDate;
-    fetch(`http://127.0.0.1:5000/diet?filter_date=${filterDate}`, {
+    if (this.state.user.userEmail) {
+      fetch(`http://127.0.0.1:5000/diet?filter_date=${filterDate}`, {
         method: 'GET',
         headers: {
             'Accept': '*/*',
@@ -33,8 +33,8 @@ class App extends Component {
             this.setState((prevState) => {
                 return {...prevState, foodItems: data.user_items}
             })
-
         });
+    }
   }
 
   addNewItemHandler = (newItem) => {
@@ -68,8 +68,9 @@ class App extends Component {
         email: user.userEmail,
         password: user.userPassword
       })})
-        .then(() => {
-          this.setState((prevState) => {
+        .then((response) => {
+          if(response.ok){
+            this.setState((prevState) => {
             window.localStorage.setItem('user', JSON.stringify({
               userEmail: user.userEmail,
               userPassword: user.userPassword
@@ -77,6 +78,12 @@ class App extends Component {
             return {...prevState, user: JSON.parse(window.localStorage.getItem('user'))};
           });
           this.fetchItems();
+          } else {
+            return Promise.reject(`Server responded with ${response.status}`);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
         })
   }
 

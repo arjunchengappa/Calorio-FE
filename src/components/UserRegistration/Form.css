@@ -65,6 +65,10 @@
   text-align: center;
 }
 
+.switch:hover {
+	cursor: pointer;
+}
+
 .switch div{
   display: inline-block;
   border: 1px solid #40005d;

@@ -45,7 +45,7 @@ class SignInForm extends Component {
 
     loginSelectedHandler = (event) => {
         this.setState((prevState) => {
-            return {...prevState, isSignUpSelected: false}
+            return {...prevState, isSignUpSelected: false, userFirstName: '', userLastName: ''}
         })
     }
 

@@ -17,13 +17,14 @@ class App extends Component {
   }
 
   fetchItems(filterDate) {
+    // console.log(this.state);
     filterDate = filterDate || this.state.filterDate;
     fetch(`http://127.0.0.1:5000/diet?filter_date=${filterDate}`, {
         method: 'GET',
         headers: {
             'Accept': '*/*',
             'Content-Type': 'application/json',
-            'X-User-Auth': btoa(`${this.props.email}:${this.props.password}`)
+            'X-User-Auth': btoa(`${this.state.user.userEmail}:${this.state.user.userPassword}`)
         }})
         .then((response) => {
             return response.json();
@@ -42,7 +43,7 @@ class App extends Component {
       headers: {
         'Accept': '*/*',
         'Content-Type': 'application/json',
-        'X-User-Auth': btoa(`${this.state.email}:${this.state.password}`)
+        'X-User-Auth': btoa(`${this.state.user.userEmail}:${this.state.user.userPassword}`)
       },
       body: JSON.stringify(newItem)
     }).then(response => response.json())
@@ -62,13 +63,18 @@ class App extends Component {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
+        firstName: user.userFirstName,
+        lastName: user.userLastName,
         email: user.userEmail,
         password: user.userPassword
       })})
         .then(() => {
           this.setState((prevState) => {
-            window.localStorage.setItem('user', JSON.stringify(user));
-            return {...prevState, user: user};
+            window.localStorage.setItem('user', JSON.stringify({
+              userEmail: user.userEmail,
+              userPassword: user.userPassword
+            }));
+            return {...prevState, user: JSON.parse(window.localStorage.getItem('user'))};
           });
           this.fetchItems();
         })
@@ -86,10 +92,6 @@ class App extends Component {
       this.fetchItems(filterDate);
       return {...prevState, filterDate: filterDate}
     });
-  }
-
-  componentDidMount() {
-    this.fetchItems();
   }
 
   render() {

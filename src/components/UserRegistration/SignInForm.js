@@ -6,9 +6,24 @@ class SignInForm extends Component {
     constructor() {
         super();
         this.state = {
+            userFirstName: '',
+            userLastName: '',
             userEmail: '',
-            userPassword: ''
+            userPassword: '',
+            isSignUpSelected: true,
         }
+    }
+
+    firstNameChangeHandler = (event) => {
+        this.setState((prevState) => {
+            return {...prevState, userFirstName: event.target.value};
+        })
+    }
+
+    lastNameChangeHandler = (event) => {
+        this.setState((prevState) => {
+            return {...prevState, userLastName: event.target.value};
+        })
     }
 
     emailChangeHandler = (event) => {
@@ -28,29 +43,73 @@ class SignInForm extends Component {
         this.props.onSignIn(this.state);
     }
 
+    loginSelectedHandler = (event) => {
+        this.setState((prevState) => {
+            return {...prevState, isSignUpSelected: false}
+        })
+    }
+
+    signUpSelectedHandler = (event) => {
+        this.setState((prevState) => {
+            return {...prevState, isSignUpSelected: true}
+        })
+    }
+
     render() {
         return (
             <form onSubmit={this.submitHandler}>
+                <div className="switch">
+                    <div 
+                        className="left"
+                        onClick={this.signUpSelectedHandler}
+                        style={{
+                            backgroundColor: this.state.isSignUpSelected ? '#510674': '#40005d'
+                        }}
+                        required
+                    >Sign Up</div>
+                    <div 
+                        className="right" 
+                        onClick={this.loginSelectedHandler}
+                        style={{
+                            backgroundColor: this.state.isSignUpSelected ? '#40005d': '#510674'
+                        }}
+                        required
+                    >Login</div>
+                </div>
+                {this.state.isSignUpSelected ? (
+                    <div className='user-registration__control'>
+                    <input 
+                        type='text'
+                        onChange={this.firstNameChangeHandler}
+                        placeholder="First Name"
+                        required
+                    />
+                    <input 
+                        type='test'
+                        onChange={this.lastNameChangeHandler}
+                        placeholder="Last Name"
+                        required
+                    />
+                </div>
+                ) : (<div></div>)}
                 <div className='new-food-tem__controls'>
                     <div className='user-registration__control'>
                         <input 
                             type='email'
                             onChange={this.emailChangeHandler}
                             placeholder="Email"
-                            // required
+                            required
                         />
-                    </div>
-                    <div className='user-registration__control'>
                         <input 
                             type='password'
                             onChange={this.passwordChangeHandler}
                             placeholder="Password"
-                            // required
+                            required
                         />
                     </div>
                 </div>
                 <div className='user-registration__actions'>
-                    <button type='submit'>Login</button>
+                    <button type='submit'>{this.state.isSignUpSelected ? "Sign Up" : "Login"}</button>
                 </div>
             </form>
         )

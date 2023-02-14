@@ -6,7 +6,7 @@ class UserRegistration extends Component {
   render () {
     return (
       <div className="user-registration">
-        <SignInForm onSignIn={this.props.onSignIn}></SignInForm>
+        <SignInForm onSignIn={this.props.onSignIn} error={this.props.error}></SignInForm>
       </div>
     )
   }

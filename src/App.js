@@ -11,7 +11,8 @@ class App extends Component {
     this.state = {
       user: JSON.parse(window.localStorage.getItem('user')) || {userEmail: '', userPassword: ''},
       foodItems: [],
-      filterDate: new Date().toISOString().slice(0, 10)
+      filterDate: new Date().toISOString().slice(0, 10),
+      error: ''
     }
     this.filterHandler = this.filterHandler.bind(this);
   }
@@ -69,8 +70,16 @@ class App extends Component {
         password: user.userPassword
       })})
         .then((response) => {
-          if(response.ok){
-            this.setState((prevState) => {
+          if (response.ok){
+            return response.json;
+          } else {
+            return response.text().then(text => {
+              throw new Error(text ? text : 'Please try again')
+            })
+          }
+        })
+        .then((data) => {
+          this.setState((prevState) => {
             window.localStorage.setItem('user', JSON.stringify({
               userEmail: user.userEmail,
               userPassword: user.userPassword
@@ -78,12 +87,11 @@ class App extends Component {
             return {...prevState, user: JSON.parse(window.localStorage.getItem('user'))};
           });
           this.fetchItems();
-          } else {
-            return Promise.reject(`Server responded with ${response.status}`);
-          }
         })
         .catch((error) => {
-          console.log(error);
+          this.setState((prevState) => {
+            return {...prevState, error: error.message};
+          })
         })
   }
 
@@ -116,7 +124,7 @@ class App extends Component {
           </div>
         ) : (
           <div> 
-            <UserRegistration onSignIn={this.signInHandler}></UserRegistration>
+            <UserRegistration onSignIn={this.signInHandler} error={this.state.error}></UserRegistration>
             <TopFoodItems></TopFoodItems>
           </div>
         )}

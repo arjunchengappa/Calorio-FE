@@ -75,6 +75,12 @@ class SignInForm extends Component {
             required
           >Login</div>
       </div>
+      {this.props.error ? (
+        <div className='error-container'>
+          <div className='error'>{this.props.error}</div>
+        </div>
+      ) : (<div></div>)
+      }
       {this.state.isSignUpSelected
         ? (
           <div className='user-registration__control'>

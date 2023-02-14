@@ -1,11 +1,11 @@
 .user-registration__controls {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 1rem;
-	margin-bottom: 1rem;
-	text-align: left;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    text-align: left;
 }
-  
+
 .user-registration__control input {
   font: inherit;
   padding: 0.5rem;
@@ -17,47 +17,47 @@
 }
   
 .user-registration__actions {
-	text-align: center;
-	align-items: center;
+    text-align: center;
+    align-items: center;
 }
 
 .user-registration {
-	background-color: #a892ee;
-	padding: 1rem;
-	margin: 2rem auto;
-	width: 50rem;
-	max-width: 95%;
-	border-radius: 12px;
-	text-align: center;
-	box-shadow: 0 1px 8px rgba(0, 0, 0, 0.25);
+    background-color: #a892ee;
+    padding: 1rem;
+    margin: 2rem auto;
+    width: 50rem;
+    max-width: 95%;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.25);
 }
 
 .user-registration button {
-	font: inherit;
-	cursor: pointer;
-	padding: 1rem 2rem;
-	border: 1px solid #40005d;
-	background-color: #40005d;
-	color: white;
-	border-radius: 12px;
-	margin-right: 1rem;
+    font: inherit;
+    cursor: pointer;
+    padding: 1rem 2rem;
+    border: 1px solid #40005d;
+    background-color: #40005d;
+    color: white;
+    border-radius: 12px;
+    margin-right: 1rem;
 }
 
 .user-registration button:hover,
 .user-registration button:active {
-	background-color: #510674;
-	border-color: #510674;
+    background-color: #510674;
+    border-color: #510674;
 }
 
 .user-registration button.alternative {
-	color: #220131;
-	border-color: transparent;
-	background-color: transparent;
+    color: #220131;
+    border-color: transparent;
+    background-color: transparent;
 }
 
 .user-registration button.alternative:hover,
 .user-registration button.alternative:active {
-	background-color: #ddb3f8;
+    background-color: #ddb3f8;
 }
 
 .switch {
@@ -66,7 +66,7 @@
 }
 
 .switch:hover {
-	cursor: pointer;
+    cursor: pointer;
 }
 
 .switch div{
@@ -91,4 +91,18 @@
 .clicked {
   background-color: #510674;
   border-color: #510674;
+}
+
+.error-container {
+  display: inline-block;
+}
+
+.error {
+  color: #763c3c;
+  background-color: #f3b5b5;
+  border-color: #d6e9c6;
+  padding: 10px 3rem;
+  margin-bottom: 5px;
+  border: 1px solid #ff0000;
+  border-radius: 4px;
 }
